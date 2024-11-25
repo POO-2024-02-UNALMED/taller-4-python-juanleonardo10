@@ -1,28 +1,25 @@
 from classroom.asignatura import Asignatura
 
 class Grupo:
-    grado = None
+    grado = "Grado 6"  # Valor inicial por defecto
 
-    def __init__(self, grupo="Grupo ordinario", asignaturas=None, estudiantes=None):
+    def __init__(self, grupo="grupo predeterminado", asignaturas=None, estudiantes=None):
         self._grupo = grupo
-        self._asignaturas = asignaturas if asignaturas is not None else []
-        self.listadoAlumnos = estudiantes if estudiantes is not None else []
+        self._asignaturas = asignaturas if asignaturas else []
+        self.listadoAlumnos = estudiantes if estudiantes else []
 
-    def listadoAsignaturas(self, asignaturas_dict):
-        for nombre, salon in asignaturas_dict.items():
-            self._asignaturas.append(Asignatura(nombre, salon))
-
-    def agregarAlumno(self, alumno, lista=None):
-        if lista is None:
-            lista = []
+    def agregarAlumno(self, alumno, lista=[]):
         lista.append(alumno)
-        self.listadoAlumnos += lista
+        self.listadoAlumnos.extend(lista)  # Agregar los nuevos alumnos a la lista
+
+    def listadoAsignaturas(self, **kwargs):
+        for nombre in kwargs.values():
+            self._asignaturas.append(Asignatura(nombre))  # Crear asignaturas con los nombres pasados
 
     def __str__(self):
-        asignaturas_str = ', '.join([str(asig) for asig in self._asignaturas])
-        alumnos_str = ', '.join(self.listadoAlumnos)
-        return f"Grupo: {self._grupo}\nAsignaturas: {asignaturas_str}\nAlumnos: {alumnos_str}"
+        alumnos_str = ", ".join(self.listadoAlumnos)
+        return f"Grupo de estudiantes: {self._grupo} ({alumnos_str})"
 
     @classmethod
-    def asignarNombre(cls, nombre="Grado 10"):
+    def asignarNombre(cls, nombre="Grado 6"):
         cls.grado = nombre
